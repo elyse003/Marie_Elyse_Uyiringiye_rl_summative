@@ -1,0 +1,26 @@
+# CropCare RL Summative — Python dependencies
+# Install: pip install -r requirements.txt
+
+# ── Core RL ───────────────────────────────────────────────────────────────────
+gymnasium>=0.29.0
+stable-baselines3>=2.2.0
+torch>=2.0.0
+
+# ── Visualisation ─────────────────────────────────────────────────────────────
+pygame>=2.5.0
+matplotlib>=3.7.0
+numpy>=1.24.0
+
+# ── Video / image I/O ─────────────────────────────────────────────────────────
+imageio>=2.31.0
+imageio-ffmpeg>=0.4.9
+Pillow>=10.0.0
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+scipy>=1.11.0        # used by SB3 internally
+pandas>=2.0.0        # optional, for result analysis notebooks
+tqdm>=4.65.0
+
+# ── Optional (Kaggle already provides these) ──────────────────────────────────
+# accelerate>=0.21.0
+# tensorboard>=2.14.0
