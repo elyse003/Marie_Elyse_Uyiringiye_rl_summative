@@ -1,12 +1,12 @@
-# \# CropCare RL: AI-Powered Crop Disease Management
+# \# CropCare RL — AI-Powered Crop Disease Management
 
-# \*\*Student:\*\* Marie Elyse Uyiringiye 
+# 
+
+# \*\*Student:\*\* Marie Elyse Uyiringiye | \*\*Institution:\*\* African Leadership University (ALU)  
 
 # \*\*Course:\*\* Machine Learning Techniques II — Reinforcement Learning  
 
-# \*\*Institution:\*\* African Leadership University (ALU)  
-
-# \*\*Video Demo:\*\* \[Watch on YouTube](#)  
+# \*\*Video Demo:\*\* \[Watch on YouTube](#) | \*\*GitHub:\*\* \[Marie\_Elyse\_Uyiringiye\_rl\_summative](#)  
 
 # \*\*Mission:\*\* Protecting smallholder farmers in Rwanda from crop disease through autonomous AI-driven farm management
 
@@ -20,11 +20,7 @@
 
 # 
 
-# This project implements and compares three reinforcement learning algorithms to autonomously manage crop disease detection and treatment on a simulated farm. The AI agent learns to patrol an 8×8 farm grid, inspect plant cells to reveal hidden disease levels, and apply targeted treatment — maximising farm health while conserving limited treatment resources.
-
-# 
-
-# \*\*Mission Context:\*\* Rwanda's smallholder farmers lose up to 40% of crop yields annually from undetected diseases. This project develops an AI agent that mimics how a precision agriculture drone would operate — autonomously scanning fields and treating only what needs treatment.
+# This project implements and compares three reinforcement learning algorithms — DQN, PPO, and REINFORCE — to autonomously manage crop disease on a simulated 8×8 farm grid. The agent inspects plant cells to reveal hidden disease levels and applies targeted treatment while conserving limited resources. Aligned with the CropCare mission of reducing yield losses for smallholder farmers in Rwanda.
 
 # 
 
@@ -34,51 +30,49 @@
 
 # \## Project Structure
 
-# ```
+# 
 
-# marie\_elyse\_rl\_summative/
+# &#x20;   Marie\_Elyse\_Uyiringiye\_rl\_summative/
 
-# ├── environment/
+# &#x20;   ├── environment/
 
-# │   ├── custom\_env.py            # Custom Gymnasium CropDiseaseEnv
+# &#x20;   │   ├── custom\_env.py       # Gymnasium CropDiseaseEnv
 
-# │   └── rendering.py             # Pygame 2D visualisation system
+# &#x20;   │   └── rendering.py        # Pygame visualisation
 
-# ├── training/
+# &#x20;   ├── training/
 
-# │   ├── dqn\_training.py          # DQN — 10 hyperparameter configs
+# &#x20;   │   ├── dqn\_training.py     # DQN — 10 configs
 
-# │   ├── pg\_training.py           # PPO — 10 hyperparameter configs
+# &#x20;   │   ├── pg\_training.py      # PPO — 10 configs
 
-# │   └── reinforce.py             # Custom REINFORCE (PyTorch)
+# &#x20;   │   └── reinforce.py        # REINFORCE — custom PyTorch
 
-# ├── models/
+# &#x20;   ├── models/
 
-# │   ├── dqn/                     # Saved DQN models (.zip)
+# &#x20;   │   ├── dqn/                # Saved DQN models (.zip)
 
-# │   └── pg/                      # Saved PPO and REINFORCE models
+# &#x20;   │   └── pg/                 # Saved PPO + REINFORCE models
 
-# ├── results/
+# &#x20;   ├── results/
 
-# │   ├── plots/                   # Learning curves and comparison charts
+# &#x20;   │   ├── plots/              # Learning curves, comparison charts
 
-# │   ├── videos/                  # Simulation recordings
+# &#x20;   │   ├── videos/             # Simulation recordings
 
-# │   ├── dqn\_results.csv
+# &#x20;   │   ├── dqn\_results.csv
 
-# │   ├── ppo\_results.csv
+# &#x20;   │   ├── ppo\_results.csv
 
-# │   └── reinforce\_results.csv
+# &#x20;   │   └── reinforce\_results.csv
 
-# ├── main.py
+# &#x20;   ├── main.py
 
-# ├── random\_demo.py
+# &#x20;   ├── random\_demo.py
 
-# ├── requirements.txt
+# &#x20;   ├── requirements.txt
 
-# └── README.md
-
-# ```
+# &#x20;   └── README.md
 
 # 
 
@@ -86,57 +80,39 @@
 
 # 
 
-# \## Environment Details
+# \## Environment
 
 # 
 
-# \### Observation Space (196-dimensional)
+# \*\*Observation space:\*\* Box(196,) float32 — agent position, visible disease per cell, inspection mask, treatment mask, resources  
+
+# \*\*Action space:\*\* Discrete(8)  
+
+# \*\*Max steps:\*\* 250  
 
 # 
 
-# | Component | Size | Description |
-
-# |---|---|---|
-
-# | Agent position | 2 | Row and col normalised to \[0, 1] |
-
-# | Visible disease per cell | 64 | Revealed after inspection, 0 if unknown |
-
-# | Inspection mask | 64 | 1 if inspected, 0 otherwise |
-
-# | Treatment mask | 64 | 1 if treated, 0 otherwise |
-
-# | Doses remaining | 1 | Normalised remaining treatment doses |
-
-# | Steps remaining | 1 | Normalised remaining time steps |
-
-# | \*\*Total\*\* | \*\*196\*\* | \*\*Box(196,) float32\*\* |
+# \### Actions
 
 # 
 
-# \### Action Space (Discrete 8)
+# &#x20;   ID  Action         Effect
 
-# 
+# &#x20;   0   Move North     Move + auto-inspect new cell
 
-# | ID | Action | Effect |
+# &#x20;   1   Move South     Move + auto-inspect new cell
 
-# |---|---|---|
+# &#x20;   2   Move West      Move + auto-inspect new cell
 
-# | 0 | Move North | Move one cell north, auto-inspect |
+# &#x20;   3   Move East      Move + auto-inspect new cell
 
-# | 1 | Move South | Move one cell south, auto-inspect |
+# &#x20;   4   Inspect        Reveal disease level of current cell
 
-# | 2 | Move West | Move one cell west, auto-inspect |
+# &#x20;   5   Light Treat    1 dose — cures Mild and Moderate
 
-# | 3 | Move East | Move one cell east, auto-inspect |
+# &#x20;   6   Heavy Treat    2 doses — cures all levels
 
-# | 4 | Inspect | Reveal disease level of current cell |
-
-# | 5 | Light Treat | 1 dose — cures Mild and Moderate disease |
-
-# | 6 | Heavy Treat | 2 doses — cures all disease levels |
-
-# | 7 | Mark Healthy | Skip cell, no treatment applied |
+# &#x20;   7   Mark Healthy   Skip cell, no treatment
 
 # 
 
@@ -144,55 +120,39 @@
 
 # 
 
-# | Level | Name | Colour |
+# &#x20;   0 = Healthy (green)
 
-# |---|---|---|
+# &#x20;   1 = Mild (yellow)
 
-# | 0 | Healthy | Green |
+# &#x20;   2 = Moderate (orange)
 
-# | 1 | Mild | Yellow |
+# &#x20;   3 = Severe (red)
 
-# | 2 | Moderate | Orange |
-
-# | 3 | Severe | Red |
-
-# | 4 | Dead | Dark Grey |
+# &#x20;   4 = Dead (dark grey)
 
 # 
 
-# \### Reward Structure
+# \### Rewards
 
 # 
 
-# | Event | Reward |
+# &#x20;   +1.0   new cell inspected
 
-# |---|---|
+# &#x20;   +2d    disease found (d = severity)
 
-# | New cell inspected | +1.0 |
+# &#x20;   +10    correct light treatment
 
-# | Disease found (severity d) | +2d |
+# &#x20;   +15    correct heavy treatment
 
-# | Correct light treatment | +10.0 |
+# &#x20;   +5     correct healthy skip
 
-# | Correct heavy treatment | +15.0 |
+# &#x20;   -0.3   per step (efficiency pressure)
 
-# | Correct healthy skip | +5.0 |
+# &#x20;   -3/-5  treating healthy plant (waste)
 
-# | Treating healthy plant | -3.0 to -5.0 |
+# &#x20;   -8d    missing diseased cell
 
-# | Missing disease (severity d) | -8d |
-
-# | Per step cost | -0.3 |
-
-# | Completion bonus | +30 + 20 x efficiency |
-
-# 
-
-# \### Episode Termination
-
-# \- \*\*Terminated:\*\* All 64 cells inspected and decided upon
-
-# \- \*\*Truncated:\*\* Maximum 250 steps reached
+# &#x20;   +30 + 20×efficiency   completion bonus
 
 # 
 
@@ -202,57 +162,37 @@
 
 # \## Quick Start
 
-# ```bash
+# 
 
-# \# Clone
+# &#x20;   # Clone and install
 
-# git clone https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git
+# &#x20;   git clone https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git
 
-# cd Marie\_Elyse\_Uyiringiye\_rl\_summative
+# &#x20;   cd marie\_elyse\_rl\_summative
 
-# \# Install
-
-# pip install -r requirements.txt
+# &#x20;   pip install -r requirements.txt
 
 # 
 
-# \# Run best agent (PPO)
+# &#x20;   # Run best agent
 
-# python main.py --algo ppo --run 0 --episodes 3
-
-# 
-
-# \# Run DQN
-
-# python main.py --algo dqn --run 9 --episodes 3
+# &#x20;   python main.py --algo ppo --run 0 --episodes 3
 
 # 
 
-# \# Run REINFORCE
+# &#x20;   # Random agent demo
 
-# python main.py --algo reinforce --run 0 --episodes 3
-
-# 
-
-# \# Random agent demo
-
-# python random\_demo.py --episodes 1
-
-# ```
+# &#x20;   python random\_demo.py --episodes 1
 
 # 
 
-# \### Train from Scratch
+# &#x20;   # Train from scratch
 
-# ```bash
+# &#x20;   python -m training.dqn\_training --all --timesteps 300000
 
-# python -m training.dqn\_training --all --timesteps 300000
+# &#x20;   python -m training.pg\_training --algo ppo --all --timesteps 300000
 
-# python -m training.pg\_training --algo ppo --all --timesteps 300000
-
-# python -m training.reinforce --all --episodes 2000
-
-# ```
+# &#x20;   python -m training.reinforce --all --episodes 2000
 
 # 
 
@@ -260,47 +200,25 @@
 
 # 
 
-# \## Algorithms Implemented
+# \## Algorithms
 
 # 
 
-# \### 1. DQN — Value-Based
+# \*\*DQN\*\* — MLP \[128,128], experience replay, target network, epsilon-greedy  
 
-# \- \*\*Architecture:\*\* MLP \[128, 128] hidden layers
-
-# \- \*\*Key Features:\*\* Experience replay buffer, target network, epsilon-greedy exploration
-
-# \- \*\*Best Run:\*\* Run 9 — lr=5e-4, gamma=0.99, buffer=75k, net=\[512]
-
-# \- \*\*Performance:\*\* 13.0 / 64 cells inspected on average
-
-# \- \*\*Finding:\*\* Converged to reward exploit — treating start cell repeatedly
+# Best: Run 9 | lr=5e-4 | gamma=0.99 | buffer=75k | inspected=13.0/64
 
 # 
 
-# \### 2. PPO — Policy Gradient
+# \*\*PPO\*\* — Shared \[128,128] MLP, clipped objective, entropy bonus, 4 parallel envs  
 
-# \- \*\*Architecture:\*\* Shared \[128, 128] MLP, separate policy and value heads
-
-# \- \*\*Key Features:\*\* Clipped surrogate objective, entropy bonus, 4 parallel environments
-
-# \- \*\*Best Run:\*\* Run 0 — lr=3e-4, gamma=0.99, n\_steps=2048, ent\_coef=0.01
-
-# \- \*\*Performance:\*\* 38.7 / 64 cells inspected (57.8% farm coverage)
-
-# \- \*\*Finding:\*\* Best exploration due to entropy regularisation
+# Best: Run 0 | lr=3e-4 | n\_steps=2048 | ent\_coef=0.01 | inspected=38.7/64 ✓
 
 # 
 
-# \### 3. REINFORCE — Policy Gradient (Custom PyTorch)
+# \*\*REINFORCE\*\* — \[128,128] MLP, Monte Carlo returns, normalisation, entropy bonus  
 
-# \- \*\*Architecture:\*\* \[128, 128] MLP with softmax output
-
-# \- \*\*Key Features:\*\* Monte Carlo returns, return normalisation, entropy bonus
-
-# \- \*\*Best Run:\*\* Run 0 — lr=1e-3, gamma=0.99, normalise=True, entropy=0.01
-
-# \- \*\*Finding:\*\* High variance but stable with return normalisation enabled
+# Best: Run 0 | lr=1e-3 | gamma=0.99 | normalise=True | entropy=0.01
 
 # 
 
@@ -308,31 +226,21 @@
 
 # 
 
-# \## Hyperparameter Tuning
+# \## Results
 
 # 
 
-# 10 configurations per algorithm = \*\*30 total training runs\*\*
+# &#x20;   Algorithm   Best Run   Avg Inspected   Avg Reward
+
+# &#x20;   PPO         Run 0      38.7 / 64       -192.3      ← best
+
+# &#x20;   DQN         Run 9      13.0 / 64       -250.6
+
+# &#x20;   REINFORCE   Run 0        —               —
 
 # 
 
-# Parameters tuned:
-
-# \- Learning rates: 1e-4 to 2e-3
-
-# \- Network architectures: \[64, 64] to \[512]
-
-# \- Discount factors (gamma): 0.90 to 0.99
-
-# \- Entropy coefficients: 0.00 to 0.05
-
-# \- Exploration fractions (DQN): 0.10 to 0.30
-
-# \- Clip ranges (PPO): 0.1 to 0.3
-
-# \- n\_steps (PPO): 512 to 2048
-
-# \- Batch sizes: 32 to 256
+# PPO outperformed DQN because its entropy regularisation explicitly incentivises exploration. DQN converged to a suboptimal exploit — treating the starting cell repeatedly rather than learning full grid coverage.
 
 # 
 
@@ -340,59 +248,11 @@
 
 # 
 
-# \## Performance Results
+# \## Mission Alignment
 
 # 
 
-# | Algorithm | Best Run | Avg Inspected | Avg Reward |
-
-# |---|---|---|---|
-
-# | \*\*PPO\*\* | \*\*Run 0\*\* | \*\*38.7 / 64\*\* | \*\*-192.3\*\* |
-
-# | DQN | Run 9 | 13.0 / 64 | -250.6 |
-
-# | REINFORCE | Run 0 | — | — |
-
-# 
-
-# PPO outperformed DQN because its entropy regularisation explicitly incentivises
-
-# exploration. DQN converged to a suboptimal exploit — treating the starting cell
-
-# repeatedly — rather than learning the full inspection-treatment pipeline.
-
-# 
-
-# \---
-
-# 
-
-# \## Mission Alignment: CropCare Rwanda
-
-# 
-
-# \*\*The Problem:\*\* Rwandan smallholder farmers lose 20-40% of yields to undetected
-
-# crop diseases. Manual inspection is slow, expensive, and often too late.
-
-# 
-
-# \*\*Our Solution:\*\* An AI agent autonomously patrols and inspects every plant cell,
-
-# treating only what needs treating and conserving limited resources.
-
-# 
-
-# \*\*Impact:\*\*
-
-# \- Reduces crop losses through early, systematic detection
-
-# \- Conserves treatment resources through intelligent prioritisation
-
-# \- Makes precision agriculture accessible without expert knowledge
-
-# \- Foundation for integration with drone or mobile app hardware
+# Rwanda's smallholder farmers lose 20–40% of yields to undetected crop diseases. This agent autonomously patrols and inspects every plant cell, treating only what needs treating and conserving limited resources — laying the foundation for integration with drone or mobile app hardware.
 
 # 
 
@@ -402,29 +262,15 @@
 
 # \## Dependencies
 
-# ```
+# 
 
-# gymnasium>=0.29.0
+# &#x20;   gymnasium>=0.29.0       stable-baselines3>=2.2.0
 
-# stable-baselines3>=2.2.0
+# &#x20;   torch>=2.0.0            pygame>=2.5.0
 
-# torch>=2.0.0
+# &#x20;   matplotlib>=3.7.0       numpy>=1.24.0
 
-# pygame>=2.5.0
-
-# matplotlib>=3.7.0
-
-# numpy>=1.24.0
-
-# imageio>=2.31.0
-
-# imageio-ffmpeg>=0.4.9
-
-# Pillow>=10.0.0
-
-# pandas>=2.0.0
-
-# ```
+# &#x20;   imageio>=2.31.0         Pillow>=10.0.0
 
 # 
 
@@ -432,21 +278,7 @@
 
 # 
 
-# \## Video Demo
+# \*\*Video Demo:\*\* \[Insert YouTube link]  
 
-# \[Insert YouTube link here]
-
-# 
-
-# \## GitHub Repository
-
-# \[https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git]
-
-# 
-
-# \---
-
-# 
-
-# \*\*Student:\*\* Marie Elyse | African Leadership University (ALU)
+# \*\*GitHub:\*\* https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git
 
