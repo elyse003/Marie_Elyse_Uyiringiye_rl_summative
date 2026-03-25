@@ -135,9 +135,13 @@ class MetricsCallback(BaseCallback):
         for info in self.locals.get("infos", []):
             if "episode" in info:
                 self.episode_rewards.append(info["episode"]["r"])
-        loss = self.locals.get("loss")
-        if loss is not None:
-            self.losses.append(float(loss))
+        # Read loss from SB3's internal logger
+        try:
+            loss = self.model.logger.name_to_value.get("train/loss", None)
+            if loss is not None:
+                self.losses.append(float(loss))
+        except Exception:
+            pass
         return True
 
 

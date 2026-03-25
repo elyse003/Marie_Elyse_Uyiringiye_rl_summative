@@ -1,173 +1,452 @@
-# CropCare RL Summative
-### Reinforcement Learning for Crop Disease Management
-**Author:** Cedric — African Leadership University
+# \# CropCare RL: AI-Powered Crop Disease Management
 
----
+# \*\*Student:\*\* Marie Elyse Uyiringiye 
 
-## Problem Statement
+# \*\*Course:\*\* Machine Learning Techniques II — Reinforcement Learning  
 
-Smallholder farmers in Rwanda lose 20–40% of yields to undetected crop diseases. This project builds an RL agent that autonomously **patrols a farm grid**, **inspects plant cells** for hidden disease, and **applies targeted treatment** — mimicking how a precision agriculture drone or robot would operate.
+# \*\*Institution:\*\* African Leadership University (ALU)  
 
-The agent must balance: thorough inspection, efficient resource usage (treatment doses), and correct diagnosis (no over- or under-treatment).
+# \*\*Video Demo:\*\* \[Watch on YouTube](#)  
 
----
+# \*\*Mission:\*\* Protecting smallholder farmers in Rwanda from crop disease through autonomous AI-driven farm management
 
-## Environment: `CropDiseaseEnv`
+# 
 
-| Property | Value |
-|---|---|
-| Grid | 8 × 8 farm cells |
-| Disease states | 0=Healthy, 1=Mild, 2=Moderate, 3=Severe, 4=Dead |
-| Disease hidden? | Yes — agent must INSPECT to reveal |
-| Disease spreads | Stochastically to neighbours (4% chance/step) |
-| Observation space | Box(196,) — position + disease visibility + resources |
-| Action space | Discrete(8) |
+# \---
 
-### Actions
+# 
 
-| ID | Action | Description |
-|---|---|---|
-| 0 | Move North | Navigate grid |
-| 1 | Move South | Navigate grid |
-| 2 | Move West | Navigate grid |
-| 3 | Move East | Navigate grid |
-| 4 | Inspect | Reveal true disease level of current cell |
-| 5 | Light Treat | 1 dose — cures Mild/Moderate |
-| 6 | Heavy Treat | 2 doses — cures all disease levels |
-| 7 | Mark Healthy | Skip cell (commit to no treatment) |
+# \## Project Overview
 
-### Rewards
+# 
 
-| Event | Reward |
-|---|---|
-| New inspection | +1.0 |
-| Found disease (severity d) | +2d |
-| Correct light treatment | +10 |
-| Correct heavy treatment | +15 |
-| Correct healthy skip | +5 |
-| Treating healthy plant (light) | -3 |
-| Treating healthy plant (heavy) | -5 |
-| Missing disease (mark healthy) | -8d |
-| Per step | -0.5 |
-| Completion bonus | +30 + 20×efficiency |
+# This project implements and compares three reinforcement learning algorithms to autonomously manage crop disease detection and treatment on a simulated farm. The AI agent learns to patrol an 8×8 farm grid, inspect plant cells to reveal hidden disease levels, and apply targeted treatment — maximising farm health while conserving limited treatment resources.
 
-### Terminal Conditions
-- **Terminated:** All cells inspected/decided
-- **Truncated:** `max_steps=250` reached
+# 
 
----
+# \*\*Mission Context:\*\* Rwanda's smallholder farmers lose up to 40% of crop yields annually from undetected diseases. This project develops an AI agent that mimics how a precision agriculture drone would operate — autonomously scanning fields and treating only what needs treatment.
 
-## Algorithms
+# 
 
-| Algorithm | Library | Script |
-|---|---|---|
-| DQN | Stable Baselines 3 | `training/dqn_training.py` |
-| PPO | Stable Baselines 3 | `training/pg_training.py` |
-| A2C | Stable Baselines 3 | `training/pg_training.py` |
-| REINFORCE | Custom PyTorch | `training/reinforce.py` |
+# \---
 
-Each algorithm has **10 hyperparameter configurations**.
+# 
 
----
+# \## Project Structure
 
-## Project Structure
+# ```
 
-```
-cedric_rl_summative/
-├── environment/
-│   ├── custom_env.py        # CropDiseaseEnv (Gymnasium)
-│   └── rendering.py         # Pygame visualisation
-├── training/
-│   ├── dqn_training.py      # DQN — 10 configs
-│   ├── pg_training.py       # PPO + A2C — 10 configs each
-│   └── reinforce.py         # REINFORCE — 10 configs (custom)
-├── models/
-│   ├── dqn/                 # Saved DQN models
-│   └── pg/                  # Saved PPO, A2C, REINFORCE models
-├── results/
-│   ├── plots/               # Learning curves, entropy, summaries
-│   └── videos/              # Simulation recordings
-├── main.py                  # Run best agent simulation
-├── random_demo.py           # Random agent (no model)
-├── requirements.txt
-└── README.md
-```
+# marie\_elyse\_rl\_summative/
 
----
+# ├── environment/
 
-## Quick Start
+# │   ├── custom\_env.py            # Custom Gymnasium CropDiseaseEnv
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+# │   └── rendering.py             # Pygame 2D visualisation system
 
-# 1. Watch random agent (no training needed)
-python random_demo.py --episodes 1
+# ├── training/
 
-# 2. Train all algorithms (adjust timesteps for speed)
-python -m training.dqn_training --all --timesteps 100000
-python -m training.pg_training  --algo ppo --all --timesteps 100000
-python -m training.pg_training  --algo a2c --all --timesteps 100000
-python -m training.reinforce    --all --episodes 1000
+# │   ├── dqn\_training.py          # DQN — 10 hyperparameter configs
 
-# 3. Run best agent simulation
-python main.py --algo ppo --episodes 3 --record
-```
+# │   ├── pg\_training.py           # PPO — 10 hyperparameter configs
 
-### Kaggle Notebook (recommended)
+# │   └── reinforce.py             # Custom REINFORCE (PyTorch)
 
-```python
-# Cell 1 — Setup
-import subprocess
-subprocess.run(["pip", "install", "-r", "requirements.txt", "-q"])
+# ├── models/
 
-# Cell 2 — Train DQN
-%run training/dqn_training.py --all --timesteps 100000
+# │   ├── dqn/                     # Saved DQN models (.zip)
 
-# Cell 3 — Train PPO + A2C
-%run training/pg_training.py --algo both --all --timesteps 100000
+# │   └── pg/                      # Saved PPO and REINFORCE models
 
-# Cell 4 — Train REINFORCE
-%run training/reinforce.py --all --episodes 1000
+# ├── results/
 
-# Cell 5 — Run simulation
-%run main.py --algo ppo --episodes 3 --record
-```
+# │   ├── plots/                   # Learning curves and comparison charts
 
----
+# │   ├── videos/                  # Simulation recordings
 
-## Results
+# │   ├── dqn\_results.csv
 
-After training, find results in:
-- `results/dqn_results.csv`, `results/ppo_results.csv`, etc.
-- `results/plots/` — all learning curve images
-- `results/videos/` — simulation recordings
+# │   ├── ppo\_results.csv
 
----
+# │   └── reinforce\_results.csv
 
-## Environment Diagram
+# ├── main.py
 
-```
-┌──────────── 8 × 8 Farm Grid ────────────┐
-│  G  G  M  G  G  S  G  G   ← True state │
-│  G  M  G  G  D  G  G  M   (hidden from  │
-│  G  G  G  M  G  G  S  G    agent until  │
-│  M  G  G  G  G  M  G  G    inspected)  │
-│  G  G  S  G  G  G  D  G                │
-│  G  M  G  G  M  G  G  G                │
-│  G  G  G  D  G  G  G  M                │
-│  G  G  G  G  G  S  G  G   → 64 cells  │
-└─────────────────────────────────────────┘
-  G=Healthy  M=Mild  S=Severe  D=Dead
+# ├── random\_demo.py
 
-              ↓ Agent inspects cell
-┌────────────── Agent View ───────────────┐
-│  ?  ?  M  ?  ?  ?  ?  ?   ← Partial   │
-│  ?  ?  ?  ?  ?  ?  ?  ?    knowledge  │
-│  ?  ?  ?  ?  ?  ?  ?  ?               │
-│  ? [A] ?  ?  ?  ?  ?  ?   A = Agent  │
-│  ...                                    │
-└─────────────────────────────────────────┘
+# ├── requirements.txt
 
-Actions: Move (4) → Inspect → Treat/Skip
-```
+# └── README.md
+
+# ```
+
+# 
+
+# \---
+
+# 
+
+# \## Environment Details
+
+# 
+
+# \### Observation Space (196-dimensional)
+
+# 
+
+# | Component | Size | Description |
+
+# |---|---|---|
+
+# | Agent position | 2 | Row and col normalised to \[0, 1] |
+
+# | Visible disease per cell | 64 | Revealed after inspection, 0 if unknown |
+
+# | Inspection mask | 64 | 1 if inspected, 0 otherwise |
+
+# | Treatment mask | 64 | 1 if treated, 0 otherwise |
+
+# | Doses remaining | 1 | Normalised remaining treatment doses |
+
+# | Steps remaining | 1 | Normalised remaining time steps |
+
+# | \*\*Total\*\* | \*\*196\*\* | \*\*Box(196,) float32\*\* |
+
+# 
+
+# \### Action Space (Discrete 8)
+
+# 
+
+# | ID | Action | Effect |
+
+# |---|---|---|
+
+# | 0 | Move North | Move one cell north, auto-inspect |
+
+# | 1 | Move South | Move one cell south, auto-inspect |
+
+# | 2 | Move West | Move one cell west, auto-inspect |
+
+# | 3 | Move East | Move one cell east, auto-inspect |
+
+# | 4 | Inspect | Reveal disease level of current cell |
+
+# | 5 | Light Treat | 1 dose — cures Mild and Moderate disease |
+
+# | 6 | Heavy Treat | 2 doses — cures all disease levels |
+
+# | 7 | Mark Healthy | Skip cell, no treatment applied |
+
+# 
+
+# \### Disease Levels
+
+# 
+
+# | Level | Name | Colour |
+
+# |---|---|---|
+
+# | 0 | Healthy | Green |
+
+# | 1 | Mild | Yellow |
+
+# | 2 | Moderate | Orange |
+
+# | 3 | Severe | Red |
+
+# | 4 | Dead | Dark Grey |
+
+# 
+
+# \### Reward Structure
+
+# 
+
+# | Event | Reward |
+
+# |---|---|
+
+# | New cell inspected | +1.0 |
+
+# | Disease found (severity d) | +2d |
+
+# | Correct light treatment | +10.0 |
+
+# | Correct heavy treatment | +15.0 |
+
+# | Correct healthy skip | +5.0 |
+
+# | Treating healthy plant | -3.0 to -5.0 |
+
+# | Missing disease (severity d) | -8d |
+
+# | Per step cost | -0.3 |
+
+# | Completion bonus | +30 + 20 x efficiency |
+
+# 
+
+# \### Episode Termination
+
+# \- \*\*Terminated:\*\* All 64 cells inspected and decided upon
+
+# \- \*\*Truncated:\*\* Maximum 250 steps reached
+
+# 
+
+# \---
+
+# 
+
+# \## Quick Start
+
+# ```bash
+
+# \# Clone
+
+# git clone https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git
+
+# cd Marie\_Elyse\_Uyiringiye\_rl\_summative
+
+# \# Install
+
+# pip install -r requirements.txt
+
+# 
+
+# \# Run best agent (PPO)
+
+# python main.py --algo ppo --run 0 --episodes 3
+
+# 
+
+# \# Run DQN
+
+# python main.py --algo dqn --run 9 --episodes 3
+
+# 
+
+# \# Run REINFORCE
+
+# python main.py --algo reinforce --run 0 --episodes 3
+
+# 
+
+# \# Random agent demo
+
+# python random\_demo.py --episodes 1
+
+# ```
+
+# 
+
+# \### Train from Scratch
+
+# ```bash
+
+# python -m training.dqn\_training --all --timesteps 300000
+
+# python -m training.pg\_training --algo ppo --all --timesteps 300000
+
+# python -m training.reinforce --all --episodes 2000
+
+# ```
+
+# 
+
+# \---
+
+# 
+
+# \## Algorithms Implemented
+
+# 
+
+# \### 1. DQN — Value-Based
+
+# \- \*\*Architecture:\*\* MLP \[128, 128] hidden layers
+
+# \- \*\*Key Features:\*\* Experience replay buffer, target network, epsilon-greedy exploration
+
+# \- \*\*Best Run:\*\* Run 9 — lr=5e-4, gamma=0.99, buffer=75k, net=\[512]
+
+# \- \*\*Performance:\*\* 13.0 / 64 cells inspected on average
+
+# \- \*\*Finding:\*\* Converged to reward exploit — treating start cell repeatedly
+
+# 
+
+# \### 2. PPO — Policy Gradient
+
+# \- \*\*Architecture:\*\* Shared \[128, 128] MLP, separate policy and value heads
+
+# \- \*\*Key Features:\*\* Clipped surrogate objective, entropy bonus, 4 parallel environments
+
+# \- \*\*Best Run:\*\* Run 0 — lr=3e-4, gamma=0.99, n\_steps=2048, ent\_coef=0.01
+
+# \- \*\*Performance:\*\* 38.7 / 64 cells inspected (57.8% farm coverage)
+
+# \- \*\*Finding:\*\* Best exploration due to entropy regularisation
+
+# 
+
+# \### 3. REINFORCE — Policy Gradient (Custom PyTorch)
+
+# \- \*\*Architecture:\*\* \[128, 128] MLP with softmax output
+
+# \- \*\*Key Features:\*\* Monte Carlo returns, return normalisation, entropy bonus
+
+# \- \*\*Best Run:\*\* Run 0 — lr=1e-3, gamma=0.99, normalise=True, entropy=0.01
+
+# \- \*\*Finding:\*\* High variance but stable with return normalisation enabled
+
+# 
+
+# \---
+
+# 
+
+# \## Hyperparameter Tuning
+
+# 
+
+# 10 configurations per algorithm = \*\*30 total training runs\*\*
+
+# 
+
+# Parameters tuned:
+
+# \- Learning rates: 1e-4 to 2e-3
+
+# \- Network architectures: \[64, 64] to \[512]
+
+# \- Discount factors (gamma): 0.90 to 0.99
+
+# \- Entropy coefficients: 0.00 to 0.05
+
+# \- Exploration fractions (DQN): 0.10 to 0.30
+
+# \- Clip ranges (PPO): 0.1 to 0.3
+
+# \- n\_steps (PPO): 512 to 2048
+
+# \- Batch sizes: 32 to 256
+
+# 
+
+# \---
+
+# 
+
+# \## Performance Results
+
+# 
+
+# | Algorithm | Best Run | Avg Inspected | Avg Reward |
+
+# |---|---|---|---|
+
+# | \*\*PPO\*\* | \*\*Run 0\*\* | \*\*38.7 / 64\*\* | \*\*-192.3\*\* |
+
+# | DQN | Run 9 | 13.0 / 64 | -250.6 |
+
+# | REINFORCE | Run 0 | — | — |
+
+# 
+
+# PPO outperformed DQN because its entropy regularisation explicitly incentivises
+
+# exploration. DQN converged to a suboptimal exploit — treating the starting cell
+
+# repeatedly — rather than learning the full inspection-treatment pipeline.
+
+# 
+
+# \---
+
+# 
+
+# \## Mission Alignment: CropCare Rwanda
+
+# 
+
+# \*\*The Problem:\*\* Rwandan smallholder farmers lose 20-40% of yields to undetected
+
+# crop diseases. Manual inspection is slow, expensive, and often too late.
+
+# 
+
+# \*\*Our Solution:\*\* An AI agent autonomously patrols and inspects every plant cell,
+
+# treating only what needs treating and conserving limited resources.
+
+# 
+
+# \*\*Impact:\*\*
+
+# \- Reduces crop losses through early, systematic detection
+
+# \- Conserves treatment resources through intelligent prioritisation
+
+# \- Makes precision agriculture accessible without expert knowledge
+
+# \- Foundation for integration with drone or mobile app hardware
+
+# 
+
+# \---
+
+# 
+
+# \## Dependencies
+
+# ```
+
+# gymnasium>=0.29.0
+
+# stable-baselines3>=2.2.0
+
+# torch>=2.0.0
+
+# pygame>=2.5.0
+
+# matplotlib>=3.7.0
+
+# numpy>=1.24.0
+
+# imageio>=2.31.0
+
+# imageio-ffmpeg>=0.4.9
+
+# Pillow>=10.0.0
+
+# pandas>=2.0.0
+
+# ```
+
+# 
+
+# \---
+
+# 
+
+# \## Video Demo
+
+# \[Insert YouTube link here]
+
+# 
+
+# \## GitHub Repository
+
+# \[https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git]
+
+# 
+
+# \---
+
+# 
+
+# \*\*Student:\*\* Marie Elyse | African Leadership University (ALU)
+

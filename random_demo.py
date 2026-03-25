@@ -54,10 +54,21 @@ def main():
               f"(diseased cells at reset: {info['total_diseased']})")
 
         while True:
-            action = env.action_space.sample()
+            # Bias: 60% move, 25% inspect, 15% treat/mark — makes video dynamic
+            roll = env.np_random.random()
+            if roll < 0.60:
+                action = int(env.np_random.integers(0, 4))
+            elif roll < 0.85:
+                action = 4
+            else:
+                action = int(env.np_random.integers(5, 8))
+
             obs, reward, terminated, truncated, info = env.step(action)
             total_reward += reward
             step += 1
+
+            # Reveal true disease state so the grid looks colourful in demo
+            env._visible_disease = env._true_disease.copy()
 
             frame = env.render()
             if frame is not None:
