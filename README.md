@@ -10,9 +10,9 @@
 
 ## Project Overview
 
-This project implements and compares three reinforcement learning algorithms to autonomously manage crop disease detection and treatment on a simulated farm. The AI agent learns to patrol an 8×8 farm grid, inspect plant cells to reveal hidden disease levels, and apply targeted treatment — maximising farm health while conserving limited treatment resources.
+This project implements and compares three reinforcement learning algorithms to autonomously manage crop disease detection and treatment on a simulated farm. The AI agent learns to patrol an 8×8 farm grid, inspect plant cells to reveal hidden disease levels, and apply targeted treatment maximising farm health while conserving limited treatment resources.
 
-**Mission Context:** Rwanda's smallholder farmers lose up to 40% of crop yields annually due to undetected diseases. Early detection and targeted treatment can dramatically reduce these losses. This project develops an AI agent that mimics how a precision agriculture drone would operate — autonomously scanning fields and treating only what needs treatment.
+**Mission Context:** Rwanda's smallholder farmers lose up to 40% of crop yields annually due to undetected diseases. Early detection and targeted treatment can dramatically reduce these losses. This project develops an AI agent that mimics how a precision agriculture drone would operate autonomously, scanning fields and treating only what needs treatment.
 
 \---
 
@@ -21,13 +21,13 @@ This project implements and compares three reinforcement learning algorithms to 
 ```
 Marie\_Elyse\_Uyiringiye\_rl\_summative/
 ├── environment/
-│   ├── \_\_init\_\_.py
-│   ├── custom\_env.py            # Custom Gymnasium CropDiseaseEnv
+│   ├── \\\_\\\_init\\\_\\\_.py
+│   ├── custom\\\_env.py            # Custom Gymnasium CropDiseaseEnv
 │   └── rendering.py             # Pygame 2D visualisation system
 ├── training/
-│   ├── \_\_init\_\_.py
-│   ├── dqn\_training.py          # DQN — 10 hyperparameter configs
-│   ├── pg\_training.py           # PPO — 10 hyperparameter configs
+│   ├── \\\_\\\_init\\\_\\\_.py
+│   ├── dqn\\\_training.py          # DQN — 10 hyperparameter configs
+│   ├── pg\\\_training.py           # PPO — 10 hyperparameter configs
 │   └── reinforce.py             # Custom REINFORCE (PyTorch)
 ├── models/
 │   ├── dqn/                     # Saved DQN models (.zip)
@@ -35,11 +35,11 @@ Marie\_Elyse\_Uyiringiye\_rl\_summative/
 ├── results/
 │   ├── plots/                   # Learning curves and comparison charts
 │   ├── videos/                  # Simulation recordings
-│   ├── dqn\_results.csv
-│   ├── ppo\_results.csv
-│   └── reinforce\_results.csv
+│   ├── dqn\\\_results.csv
+│   ├── ppo\\\_results.csv
+│   └── reinforce\\\_results.csv
 ├── main.py                      # Entry point — run best agent
-├── random\_demo.py               # Random agent demo (no training)
+├── random\\\_demo.py               # Random agent demo (no training)
 ├── requirements.txt
 └── README.md
 ```
@@ -99,7 +99,7 @@ Marie\_Elyse\_Uyiringiye\_rl\_summative/
 
 ### Episode Termination
 
-* **Terminated:** All 64 cells inspected and decided upon
+* **Terminated:** All 64 cells were inspected and decided upon
 * **Truncated:** Maximum 250 steps reached
 
 \---
@@ -115,7 +115,7 @@ Marie\_Elyse\_Uyiringiye\_rl\_summative/
 
 ```bash
 # Clone the repository
-git clone https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git
+git clone https://github.com/elyse003/Marie\\\_Elyse\\\_Uyiringiye\\\_rl\\\_summative.git
 cd Marie\_Elyse\_Uyiringiye\_rl\_summative
 
 # Install dependencies
@@ -135,17 +135,17 @@ python main.py --algo dqn --run 9 --episodes 3
 python main.py --algo reinforce --run 0 --episodes 3
 
 # Random agent demo (no model needed)
-python random\_demo.py --episodes 1
+python random\\\_demo.py --episodes 1
 ```
 
 ### Train from Scratch
 
 ```bash
 # Train DQN — 10 configurations
-python -m training.dqn\_training --all --timesteps 300000
+python -m training.dqn\\\_training --all --timesteps 300000
 
 # Train PPO — 10 configurations
-python -m training.pg\_training --algo ppo --all --timesteps 300000
+python -m training.pg\\\_training --algo ppo --all --timesteps 300000
 
 # Train REINFORCE — 10 configurations
 python -m training.reinforce --all --episodes 2000
@@ -195,7 +195,7 @@ Parameters tuned across all algorithms:
 * n\_steps (PPO): 512 to 2048
 * Batch sizes: 32 to 256
 
-All results saved to `results/{algo}\_results.csv`
+All results saved to `results/{algo}\\\_results.csv`
 
 \---
 
@@ -208,8 +208,8 @@ All results saved to `results/{algo}\_results.csv`
 |REINFORCE|Run 0|—|—|
 
 **Key Finding:** PPO outperformed DQN because its entropy regularization explicitly
-incentivizes exploration. DQN converged to a suboptimal exploit — treating the
-starting cell repeatedly for immediate reward — rather than learning the full
+incentivizes exploration. DQN converged to a suboptimal exploit, treating the
+starting cell repeatedly for an immediate reward rather than learning the full
 inspection-treatment pipeline across the grid.
 
 \---
@@ -220,7 +220,7 @@ The Pygame rendering system features:
 
 * **Farm Grid:** 8x8 color-coded disease grid from green (healthy) to dark grey (dead)
 * **Agent:** White circle with directional arrow showing current position
-* **HUD Panel:** Real-time episode stats — total reward, sick cells, inspected count, doses remaining
+* **HUD Panel:** Real-time episode stats, total reward, sick cells, inspected count, doses remaining
 * **Resource Bars:** Animated dose and time progress bars
 * **Status Bar:** Inspection and treatment coverage percentages at the bottom
 
