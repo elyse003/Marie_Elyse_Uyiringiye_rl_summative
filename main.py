@@ -9,7 +9,6 @@ Usage
     python main.py                          # auto-select best model
     python main.py --algo dqn --run 3       # specific DQN run
     python main.py --algo ppo --run 0
-    python main.py --algo a2c --run 2
     python main.py --algo reinforce --run 1
     python main.py --episodes 5 --record    # record to video
 """
@@ -39,8 +38,8 @@ def load_model(algo: str, run_id: int | None):
     if algo == "reinforce":
         return _load_reinforce(run_id)
 
-    from stable_baselines3 import DQN, PPO, A2C
-    cls_map = {"dqn": DQN, "ppo": PPO, "a2c": A2C}
+    from stable_baselines3 import DQN, PPO
+    cls_map = {"dqn": DQN, "ppo": PPO}
     model_dir = os.path.join("models", "dqn" if algo == "dqn" else "pg")
 
     if run_id is not None:
@@ -202,7 +201,7 @@ def run_simulation(
 
             if terminated or truncated:
                 elapsed = time.time() - t_start
-                reason  = "✓ COMPLETE" if terminated else "⏰ TIME LIMIT"
+                reason  = "✓ COMPLETE" if terminated else " TIME LIMIT"
                 print(f"│")
                 print(f"│  {reason}  in {step} steps ({elapsed:.1f}s)")
                 print(f"│  Total reward      : {ep_reward:>+.2f}")

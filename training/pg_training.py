@@ -1,7 +1,7 @@
 """
 training/pg_training.py
 =======================
-Trains PPO and A2C agents on CropDiseaseEnv using Stable Baselines 3.
+Trains PPO agent on CropDiseaseEnv using Stable Baselines 3.
 Each algorithm gets 10 hyperparameter configurations with results
 logged to CSV and visualised.
 

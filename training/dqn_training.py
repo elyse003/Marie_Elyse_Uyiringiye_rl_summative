@@ -6,7 +6,7 @@ Stable Baselines 3.  Runs 10 hyperparameter configurations and
 logs results to CSV + plots.
 
 Run:
-    python -m training.dqn_training [--timesteps 100000] [--run_id 0]
+    python -m training.dqn_training [--timesteps 300000] [--run_id 0]
     python -m training.dqn_training --all          # trains all 10 configs
 
 Outputs
