@@ -3,7 +3,7 @@
 **Student:** Marie Elyse  
 **Course:** Machine Learning Techniques II — Reinforcement Learning  
 **Institution:** African Leadership University (ALU)  
-**Video Demo:** [Watch on YouTube](#)  
+**Video Demo:** [Watch on YouTube](https://www.youtube.com/watch?v=V6kqTXL1iRo)  
 **Mission:** Protecting smallholder farmers in Rwanda from crop disease through autonomous AI-driven farm management
 
 \---
@@ -19,15 +19,15 @@ This project implements and compares three reinforcement learning algorithms to 
 ## Project Structure
 
 ```
-Marie\_Elyse\_Uyiringiye\_rl\_summative/
+Marie_Elyse_Uyiringiye_rl_summative/
 ├── environment/
-│   ├── \\\_\\\_init\\\_\\\_.py
-│   ├── custom\\\_env.py            # Custom Gymnasium CropDiseaseEnv
+│   ├── __init__.py
+│   ├── custom_env.py            # Custom Gymnasium CropDiseaseEnv
 │   └── rendering.py             # Pygame 2D visualisation system
 ├── training/
-│   ├── \\\_\\\_init\\\_\\\_.py
-│   ├── dqn\\\_training.py          # DQN — 10 hyperparameter configs
-│   ├── pg\\\_training.py           # PPO — 10 hyperparameter configs
+│   ├── __init__.py
+│   ├── dqn_training.py          # DQN — 10 hyperparameter configs
+│   ├── pg_training.py           # PPO — 10 hyperparameter configs
 │   └── reinforce.py             # Custom REINFORCE (PyTorch)
 ├── models/
 │   ├── dqn/                     # Saved DQN models (.zip)
@@ -35,11 +35,12 @@ Marie\_Elyse\_Uyiringiye\_rl\_summative/
 ├── results/
 │   ├── plots/                   # Learning curves and comparison charts
 │   ├── videos/                  # Simulation recordings
-│   ├── dqn\\\_results.csv
-│   ├── ppo\\\_results.csv
-│   └── reinforce\\\_results.csv
+│   ├── dqn_results.csv
+│   ├── ppo_results.csv
+│   └── reinforce_results.csv
 ├── main.py                      # Entry point — run best agent
-├── random\\\_demo.py               # Random agent demo (no training)
+├── random_demo.py               # Random agent demo (no training)
+├── notebook.ipynb               # Model training
 ├── requirements.txt
 └── README.md
 ```
@@ -115,8 +116,8 @@ Marie\_Elyse\_Uyiringiye\_rl\_summative/
 
 ```bash
 # Clone the repository
-git clone https://github.com/elyse003/Marie\\\_Elyse\\\_Uyiringiye\\\_rl\\\_summative.git
-cd Marie\_Elyse\_Uyiringiye\_rl\_summative
+git clone https://github.com/elyse003/Marie_Elyse_Uyiringiye_rl_summative.git
+cd Marie_Elyse_Uyiringiye_rl_summative
 
 # Install dependencies
 pip install -r requirements.txt
@@ -135,17 +136,17 @@ python main.py --algo dqn --run 9 --episodes 3
 python main.py --algo reinforce --run 0 --episodes 3
 
 # Random agent demo (no model needed)
-python random\\\_demo.py --episodes 1
+python random_demo.py --episodes 1
 ```
 
-### Train from Scratch
+### Train from Scratch Running the notebook
 
 ```bash
 # Train DQN — 10 configurations
-python -m training.dqn\\\_training --all --timesteps 300000
+python -m training.dqn_training --all --timesteps 300000
 
 # Train PPO — 10 configurations
-python -m training.pg\\\_training --algo ppo --all --timesteps 300000
+python -m training.pg_training --algo ppo --all --timesteps 300000
 
 # Train REINFORCE — 10 configurations
 python -m training.reinforce --all --episodes 2000
@@ -195,7 +196,7 @@ Parameters tuned across all algorithms:
 * n\_steps (PPO): 512 to 2048
 * Batch sizes: 32 to 256
 
-All results saved to `results/{algo}\\\_results.csv`
+All results saved to `results/{algo}_results.csv`
 
 \---
 
@@ -264,11 +265,11 @@ pandas>=2.0.0
 
 ## Video Demo
 
-\[Insert YouTube link here]
+\[https://www.youtube.com/watch?v=V6kqTXL1iRo]
 
 ## GitHub Repository
 
-\[https://github.com/elyse003/Marie\_Elyse\_Uyiringiye\_rl\_summative.git]
+\[https://github.com/elyse003/Marie_Elyse_Uyiringiye_rl_summative.git]
 
 \---
 
